@@ -1,0 +1,10 @@
+---
+title: "Homework14"
+author: "Maggie Layman"
+format: html
+editor: visual
+---
+
+3 October 2024
+
+Objectives: Practice connecting Github and Rstudio
