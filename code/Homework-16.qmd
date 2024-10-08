@@ -1,0 +1,107 @@
+---
+title: "Homework-16"
+author: "ML"
+format: html
+editor: visual
+---
+
+10/09/2024
+
+\## Homework 16
+
+Reinforcing Chapter 3 Concepts
+
+set things up
+```{r}
+rm(list = ls()) #clears environment
+# establish packages
+library (tidyverse)
+library (here)
+```
+
+Create a new dataframe called "cover" by importing the csv file called “donnerville_percent_cover.csv”
+```{r}
+cover <- read.csv (here("data", "donnerville_percent_cover.csv")) 
+```
+
+examine the data set using at least 2 functions
+```{r}
+#1
+summary (cover) # median, mean, min, max, and interquartile ranges and sample sizes
+#2 
+names (cover) # column names
+```
+Make Site, Plot type and cover_type into factor variables.
+```{r}
+cover$Site <- as.factor (cover$Site)
+cover$Plot.type <- as.factor (cover$Plot.type)
+cover$cover_type <- as.factor (cover$cover_type)
+```
+Make Date into a date variable.
+```{r}
+?as.Date() # i forgot how this works...let's check
+# cover$Date <- as.Date(cover$Date,"%d%b%Y")
+# this turned the values to NA, let's restart
+
+# i'm going to try using which() to fix the data and try this method again
+fixTreatment <- which (cover$Date == ("13-Sep-17")) 
+  cover$Date [fixTreatment] <- "13jan2017"
+  
+# now run the Date code again
+cover$Date <- as.Date(cover$Date,"%d%b%Y") # much better
+```
+Do some error checking on your data and fix any mistakes you find.
+```{r}
+# definitely an issue with a Site name 
+levels (cover$Site)
+
+fixTreatment1 <- which (cover$Site %in% c("DONNERVILLE - 1" , "donnerville 1")) 
+  cover$Site [fixTreatment1] <- "Donnerville 1"
+
+fixTreatment2 <- which (cover$Site %in% c("Donnerville 2" , "donnerville 2")) 
+  cover$Site [fixTreatment2] <- "Donnerville 2"  
+  
+fixTreatment3 <- which (cover$Site %in% c("donnerville-3" , "Donnerville 3")) 
+  cover$Site [fixTreatment3] <- "Donnerville 3"
+  
+cover$Site <- factor (cover$Site)
+levels(cover$Site)
+
+# and cover_type
+levels (cover$cover_type)
+
+fixTreatment4 <- which (cover$cover_type %in% c("bare" , "Bare")) 
+  cover$cover_type [fixTreatment4] <- "Bare"
+fixTreatment5 <- which (cover$cover_type %in% c("bryophtes" , "Bryophytes")) 
+  cover$cover_type [fixTreatment5] <- "Bryophytes"
+fixTreatment6 <- which (cover$cover_type == ("vasc ")) #GRRRR there is an extra space here that was hard to find
+  cover$cover_type [fixTreatment6] <- "Vascular"
+  
+cover$cover_type <- factor (cover$cover_type)
+levels(cover$cover_type)
+
+```
+
+Determine the average percent cover by cover type (bare, bryophytes, vascular plants) for Donnerville 1.
+```{r}
+# okay i want to find the mean percent for each cover_type (a column) for Donnerville 1 (a value in column Site)
+cover %>% # work with cover data
+  group_by (cover_type)%>% # group data into cover types
+    filter (Site=="Donnerville 1") %>% # get all the rows where Site = Donnerville 1
+      summarise (
+          meancover = mean (Percent)) # find the means of these data
+```
+Determine the average percent vascular plant cover across all sites.
+```{r}
+# finding the mean percent of vascular (a value in cover_type) 
+cover %>% # work with cover data
+    filter (cover_type=="Vascular") %>% # get all the rows where covertype = vascular
+      summarise (
+          meancover2 = mean (Percent)) # find the means of these data
+```
+
+
+
+
+
+
