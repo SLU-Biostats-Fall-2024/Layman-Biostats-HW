@@ -1,0 +1,109 @@
+---
+title: "Homework-18"
+author: "ML"
+format: html
+editor: visual
+---
+
+10/13/2024
+
+# Homework 18
+
+## Chapter 4 GSWR
+
+set things up
+
+```{r}
+rm(list = ls()) #clears environment
+# establish packages
+library (tidyverse)
+library (here)
+```
+
+```{r}
+# read in compensation data
+compensation <- read.csv (here("data", "compensation.csv"))
+```
+
+```{r}
+# check out the data
+glimpse (compensation)
+# make a plot (dataframe), then for aesthetics assign variables to an axis
+ggplot (compensation, aes(x=Root, y=Fruit))+
+  geom_point() # geometric layer: points
+```
+
+## Customizations
+
+```{r}
+ggplot (compensation, aes (x=Root,y=Fruit))+
+  geom_point()
+  theme_bw() #gets rid of grey background
+```
+
+```{r}
+ggplot (compensation, aes (x=Root,y=Fruit))+
+  geom_point (size=5)+ #makes the points ridiculously large
+  theme_bw()
+```
+```{r}
+ggplot (compensation, aes (x=Root,y=Fruit))+
+  geom_point (size=5)+
+  xlab("Root Biomass") + #xaxis label
+  ylab("Fruit Production")+ #yaxis label
+  theme_bw()
+```
+```{r}
+# changes colors of points to match specific levels in a group
+# must've been from NZ or something again who spells colour like that
+ggplot (compensation, aes (x=Root,y=Fruit, colour=Grazing))+
+  geom_point (size=5)+
+  xlab("Root Biomass") + #xaxis label
+  ylab("Fruit Production")+ #yaxis label
+  theme_bw()
+```
+```{r}
+# separates points by shape
+ggplot (compensation, aes (x=Root,y=Fruit, shape=Grazing))+
+  geom_point (size=5)+
+  xlab("Root Biomass") + #xaxis label
+  ylab("Fruit Production")+ #yaxis label
+  theme_bw()
+```
+
+## Boxplots
+```{r}
+ggplot (compensation, aes (x=Grazing,y=Fruit))+
+  geom_boxplot() + # makes a boxplot
+  xlab("Grazing Treatment") + #xaxis label
+  ylab("Fruit Production")+ #yaxis label
+  theme_bw()
+```
+```{r}
+ggplot (compensation, aes (x=Grazing,y=Fruit))+
+  geom_boxplot() + # makes a boxplot
+  geom_point(size=4,colour='lightgrey',alpha=0.5)+
+  xlab("Grazing Treatment") + #xaxis label
+  ylab("Fruit Production")+ #yaxis label
+  theme_bw()
+```
+## Histogram
+```{r}
+ggplot(compensation,aes(x=Fruit))+
+  geom_histogram(bins=10) # num of bins changes or
+# alt (binwidth) binwidth changes width of each bar
+```
+```{r}
+# using facet wraps
+ggplot(compensation,aes(x=Fruit))+
+  geom_histogram(binwidth=15)+
+  facet_wrap (~Grazing) # separates graphs
+```
+## Saving work
+```{r}
+ggsave("ThatCoolHistogramofFruit.png")
+```
+
+
+
+
