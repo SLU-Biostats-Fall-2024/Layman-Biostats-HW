@@ -1,0 +1,96 @@
+---
+title: "Biostats - Homework 20"
+format: html
+editor: visual
+---
+
+### Introduction
+
+The objective of this assignment is to have you continue practicing the skills you have learned in Chapters 3 and 4 of Getting Started with R and reinforce the ideas we discussed in class regarding the Weissgerber et al. paper. Please complete all of the following steps:
+
+1.  Write the code to set up your workspace.
+
+```{r}
+rm(list = ls()) # clears environment
+library (tidyverse)
+library (here)
+```
+
+2.  Read in the dataset called soil_data.csv and name it "soil."
+
+```{r}
+soil <- read.csv (here ("data", "soil_data.csv"))
+```
+
+3.  Create a histogram for the SOM_percent column in the dataframe. Accept the default number of bins.
+
+```{r}
+ggplot(soil,aes(x=SOM_percent))+
+  geom_histogram()
+```
+
+How would you describe the mean_SOM data based on viewing the histogram? Write your answer below:
+
+The histogram does not show a mean value of SOM, but based on viewing the histogram, I would assume it is close to the mode, which appears to be around 6.
+
+4.  Create a new dataframe called SOM by calculating for each forest the mean soil organic matter and the standard deviation of soil organic matter. Make sure to name variables you create "mean_SOM" and "sd_SOM" so that the next code chunk I give you works.
+
+```{r}
+SOM <- soil %>% 
+    group_by(Forest) %>%
+      mutate (mean_SOM = mean (SOM_percent)) %>%
+       mutate (sd_SOM = sd (SOM_percent))
+View (SOM)
+
+```
+
+5.  Now run the following code chunk which will create a bar plot of mean soil organic matter per forest, with standard deviation as error bars.
+
+```{r}
+ggplot(SOM, aes(Forest, mean_SOM))+
+  geom_errorbar(aes(ymax = mean_SOM + sd_SOM, ymin = mean_SOM - sd_SOM), width = 0.2)+
+  geom_col(fill = "white", color = "black")+
+  ylab("Mean percent soil organic matter")+
+  xlab("Forest name")
+# I'm not seeing any error bars here - maybe theyre just really small?
+
+ggplot(SOM, aes(Forest, mean_SOM))+
+  geom_col(fill = "white", color = "black")+
+  ylab("Mean percent soil organic matter")+
+  xlab("Forest name")
+# I did this to compare the graph without code for the error bars and don't see a change. This tells me something in my data isn't representing error. 
+
+# Looking back at Question 4, I grouped the data by Forest, calculating a SD of the SOM of each forest type. Let's inquire
+SOM$sd_SOM
+# Looks like the data ranges between 0 and 18. I would expect the values closer to 18 (on the Kip Tract) to show bars on the graph.
+```
+
+Based on what you see in the bar chart, how would you describe the pattern of SOM between the 4 different forests? Write your answer here:
+
+Based on the bar chart, the SOM of the Kip Tract appears much higher (nearly 3X greater) than the other forests. The other forests have similar SOMs in comparison to the Kip Tract.
+
+Now create a boxplot of the SOM_percent data. Use Forest as the x-axis variable and overlay the point data on top of the boxplot. Make the points blue and somewhat transparent. Call the x-axis "Forest name" and the y-axis "Percent soil organic matter" (hint: See homework 18...).
+
+```{r}
+ggplot (SOM, aes (x=Forest,y=SOM_percent))+
+  geom_boxplot() + # makes a boxplot
+  geom_point(size=14,colour='blue',alpha=0.3)+ # not totally sure what overlay point data at the top means, so I'm just going to increase the size of the points
+  xlab("Forest Name") + #xaxis label
+  ylab("Percent soil organic matter")+ #yaxis label
+  theme_bw()
+
+```
+
+Based on what you see in the box plot, write out your answers the following questions:
+
+-   how would you describe the pattern of SOM between the 4 different forests?
+
+All four forests have the majority of their SOM data clustered \<10. Kip Tract has more spread, while the others have closer data points.
+
+-   What do you notice that is different from how the data were displayed in the bar plot?
+
+This boxplot shows us the spread of the data and any outliers which were absent in the bar chart.
+
+-   Which plot type is more informative? Explain your answer.
+
+The boxplot is more informative because it shows us the frequency of the data collected and is easier to read when looking for patterns in sample size, spread, and outliers.
