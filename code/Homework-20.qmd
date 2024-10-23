@@ -48,6 +48,23 @@ View (SOM)
 
 ```
 
+Now summarise Nitrogen
+```{r}
+Nitrogen <-soil %>%
+    group_by(Forest) %>%
+      summarise(
+        mean_N = mean(Nitrate_N_ppm, na.rm=T),
+        sd_N = sd(Nitrate_N_ppm, na.rm=T)
+      )
+View (Nitrogen)
+# returns NA bc Nitrate_N_ppm has NAs
+# from now on, we'll use Nitrate_N_ppm, na.rm =TRUE
+# if theres a different null value, use which () to solve
+  # fix_na <- which (DF,nitrate==-999)
+  # DF$nitrate[fix_na] <- NA
+```
+
+
 5.  Now run the following code chunk which will create a bar plot of mean soil organic matter per forest, with standard deviation as error bars.
 
 ```{r}
@@ -68,7 +85,7 @@ Now create a boxplot of the SOM_percent data. Use Forest as the x-axis variable 
 ```{r}
 ggplot (soil, aes (x=Forest,y=SOM_percent))+
   geom_boxplot() + # makes a boxplot
-  geom_point(size=14,colour='blue',alpha=0.3)+ # not totally sure what overlay point data at the top means, so I'm just going to increase the size of the points
+  geom_point(size=2,colour='blue',alpha=0.5)+ # not totally sure what overlay point data at the top means, so I'm just going to increase the size of the points
   xlab("Forest Name") + #xaxis label
   ylab("Percent soil organic matter")+ #yaxis label
   theme_bw()
