@@ -9,7 +9,6 @@ Maggie Layman 10/22 HW 20
 
 The objective of this assignment is to have you continue practicing the skills you have learned in Chapters 3 and 4 of Getting Started with R and reinforce the ideas we discussed in class regarding the Weissgerber et al. paper. Please complete all of the following steps:
 
-
 1.  Write the code to set up your workspace.
 
 ```{r}
