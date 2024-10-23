@@ -4,8 +4,8 @@ author: "ML"
 format: html
 editor: visual
 ---
-10/07/2024
-## Homework 15
+
+10/07/2024 \## Homework 15
 
 Working through chapter 3 of Getting Started with R
 
