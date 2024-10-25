@@ -49,6 +49,7 @@ View (SOM)
 ```
 
 Now summarise Nitrogen
+
 ```{r}
 Nitrogen <-soil %>%
     group_by(Forest) %>%
@@ -63,7 +64,6 @@ View (Nitrogen)
   # fix_na <- which (DF,nitrate==-999)
   # DF$nitrate[fix_na] <- NA
 ```
-
 
 5.  Now run the following code chunk which will create a bar plot of mean soil organic matter per forest, with standard deviation as error bars.
 

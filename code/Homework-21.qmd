@@ -1,0 +1,86 @@
+---
+title: "HW 21"
+author: "ML"
+format: html
+editor: visual
+---
+
+Maggie Layman Homework 25 10/25/2024
+
+## Beginning Statistics in R
+
+Working through the first half of Chapter 5 in GSWR
+
+```{r}
+rm(list = ls())
+library(tidyverse)
+library(here)
+```
+
+```{r}
+lady <- read.csv(here("data", "ladybirds.csv"))
+glimpse (lady)
+```
+
+```{r}
+lady$Habitat <- as.factor(lady$Habitat)
+lady$Site <- as.factor(lady$Site)
+lady$colour <- as.factor(lady$colour)
+glimpse (lady)
+```
+
+```{r}
+totals <- lady %>%
+  group_by(Habitat,colour)%>%
+    summarise (total.number = sum(number))
+View (totals)
+```
+
+```{r}
+ggplot(totals,aes(x=Habitat,y=total.number, fill=colour))+
+  geom_bar(stat='identity', position='dodge')
+```
+
+```{r}
+ggplot(totals,aes(x=Habitat,y=total.number, fill=colour))+
+  geom_bar(stat='identity', position='dodge')+
+    scale_fill_manual(values=c(black="black",red="red" ))
+```
+
+```{r}
+lady.mat <- xtabs(number ~ Habitat + colour, data=lady)
+lady.mat
+
+chisq.test(lady.mat)
+```
+
+```{r}
+lady.chi <- chisq.test(lady.mat)
+names(lady.chi)
+```
+
+```{r}
+ozone <- read.csv(here("data", "ozone.csv"))
+glimpse (ozone)
+```
+
+```{r}
+ozone$Garden.location <- as.factor(ozone$Garden.location)
+ozone$Garden.ID <- as.factor(ozone$Garden.ID)
+glimpse(ozone)
+```
+
+```{r}
+ggplot(ozone,aes(x=Ozone))+
+  geom_histogram(binwidth=10)+
+  facet_wrap(~Garden.location,ncol=1) 
+  theme_bw()
+```
+
+```{r}
+t.test(Ozone~Garden.location,data=ozone)
+```
+
+```{r}
+var.test(Ozone~Garden.location,data=ozone)
+```

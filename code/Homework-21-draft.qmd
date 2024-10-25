@@ -1,0 +1,128 @@
+---
+title: "HW 21"
+author: "ML"
+format: html
+editor: visual
+---
+
+Maggie Layman Homework 25 10/25/2024
+
+## Beginning Statistics in R
+
+Working through the first half of Chapter 5 in GSWR
+
+Note that when you read in the ladybird and ozone data sets, you will want to convert a number of variables to factor in order to match the book.
+
+Remember to make notes and commentary outside of code chunks and to comment the code within code chunks.
+
+Set things up
+
+```{r}
+# clear environment
+rm(list = ls())
+# open packages
+library(tidyverse)
+library(here)
+```
+
+import data
+
+```{r}
+lady <- read.csv(here("data", "ladybirds.csv"))
+glimpse (lady)
+```
+
+alter data types
+
+```{r}
+lady$Habitat <- as.factor(lady$Habitat)
+lady$Site <- as.factor(lady$Site)
+lady$colour <- as.factor(lady$colour)
+glimpse (lady)
+```
+
+## organize the data for plotting
+
+```{r}
+totals <- lady %>%
+  group_by(Habitat,colour)%>%
+    summarise (total.number = sum(number))
+View (totals)
+```
+
+Make a figure (bar chart) of this data
+
+```{r}
+ggplot(totals,aes(x=Habitat,y=total.number, fill=colour))+
+  geom_bar(stat='identity', position='dodge')
+```
+
+same thing, with the specific colors we want
+
+```{r}
+ggplot(totals,aes(x=Habitat,y=total.number, fill=colour))+
+  geom_bar(stat='identity', position='dodge')+
+    scale_fill_manual(values=c(black="black",red="red" ))
+```
+
+analysis: looks like the balck is more common in industrial habitat but can we test this? yes, a chi\^2 test will test that frequencies of color is not equally distributed among the habitats. we will expect to reject the null hypothesis
+
+making x\^2 test
+
+```{r}
+# first transform data
+lady.mat <- xtabs(number ~ Habitat + colour, data=lady)
+lady.mat
+
+# then make test
+chisq.test(lady.mat)
+```
+
+p is very small, so we can reject the null hypothesis and conclude association btwn Habitat and colour/morph
+
+find more about the chi\^2 test
+
+```{r}
+lady.chi <- chisq.test(lady.mat)
+names(lady.chi)
+```
+
+## two sample t-test
+
+read in new data
+
+```{r}
+ozone <- read.csv(here("data", "ozone.csv"))
+glimpse (ozone)
+```
+
+alter data types
+
+```{r}
+ozone$Garden.location <- as.factor(ozone$Garden.location)
+ozone$Garden.ID <- as.factor(ozone$Garden.ID)
+glimpse(ozone)
+```
+
+plot data
+
+```{r}
+ggplot(ozone,aes(x=Ozone))+
+  geom_histogram(binwidth=10)+
+  facet_wrap(~Garden.location,ncol=1) # splits into 2 charts by location
+  theme_bw()
+```
+
+we might want to test difference in mean ozone levels between 2 groups (location)
+
+now do the t-test
+
+```{r}
+t.test(Ozone~Garden.location,data=ozone)
+```
+
+another way
+
+```{r}
+var.test(Ozone~Garden.location,data=ozone)
+```
