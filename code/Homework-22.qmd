@@ -84,4 +84,4 @@ Now write a statement or two that interprets the results of your analysis.
 
 The p value, 0.0001785, is very low (p\<0.05), meaning we would reject our null hypothesis that Vaccination and Death were not related in this context.
 
-(x\^2 = 14.044, df =1, p=0.0001785)
+There appears to be a significant effect of vaccination status on whether or not covid patients live or die. We reject our null hypothesis that there is a difference in vaccination among death rates (x\^2 = 14.044, df =1, p=0.0001785)
