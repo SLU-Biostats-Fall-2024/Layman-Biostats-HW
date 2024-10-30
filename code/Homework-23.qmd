@@ -1,0 +1,67 @@
+---
+title: "Homework-23"
+author: "ML"
+format: html
+editor: visual
+---
+
+## Homework 23
+
+Oct 29 2024 - Getting Started with R book (Sections 5.4 - 5.5)
+
+set things up
+
+```{r}
+rm(list = ls())
+library (tidyverse)
+library (here)
+```
+
+read & examine plant data
+
+```{r}
+plant_gr <- read.csv (here("data", "plant.growth.rate.csv"))
+glimpse(plant_gr)
+```
+
+make a scatterplot comparing soil moisture to growth
+
+```{r}
+ggplot(plant_gr,
+  aes(x=soil.moisture.content, y=plant.growth.rate))+
+    geom_point()+
+    ylab("Plant Growth Rate (mm/week)") +
+    theme_bw()
+```
+
+make a simple linear regression hypothesizing plant growth as a function of soil moisture content
+
+```{r}
+model_pgr <- lm(plant.growth.rate~ soil.moisture.content,data=plant_gr)
+model_pgr
+```
+
+check the assumptions of the linear model
+
+```{r}
+# library(ggfortify) # it this package doesn't exist? I can't figure out to proceed in this code chunk but I will follow along in the book
+#autoplot(model_pgr, smooth.colour=NA)
+
+# this should give me the same models
+plot(model_pgr, smooth.colour=NA)
+```
+
+interpret results
+
+```{r}
+anova(model_pgr)
+
+```
+
+p is small, reject null hypothesis of no correlation
+
+look at intercept and slope values
+
+```{r}
+summary(model_pgr)
+```
