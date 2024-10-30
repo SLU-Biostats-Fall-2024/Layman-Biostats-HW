@@ -44,8 +44,8 @@ model_pgr
 check the assumptions of the linear model
 
 ```{r}
-# library(ggfortify) # it this package doesn't exist? I can't figure out to proceed in this code chunk but I will follow along in the book
-#autoplot(model_pgr, smooth.colour=NA)
+library(ggfortify) # it this package doesn't exist? I can't figure out to proceed in this code chunk but I will follow along in the book
+autoplot(model_pgr, smooth.colour=NA)
 
 # this should give me the same models
 plot(model_pgr, smooth.colour=NA)
