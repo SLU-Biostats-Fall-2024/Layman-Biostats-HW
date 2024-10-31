@@ -1,0 +1,98 @@
+---
+title: "Homework 24"
+format: html
+editor: visual
+---
+
+## Overview
+
+For your homework you will implement a data analysis using a dataset on crab growth measurements.
+
+Set things up (hint: there is a new package to add with `library()`)
+
+```{r}
+rm(list = ls())
+library(tidyverse)
+library(here)
+library(ggfortify)
+```
+
+## The data
+
+Let's pull in some data appropriate biologists: crab measurements. This dataset includes measurements of farmed crabs.
+
+```{r}
+crabs <- read.csv(here("Data","CrabAgePrediction.csv"))
+glimpse(crabs)
+```
+
+One of the variables is categorical - let's fix that in the data.
+
+```{r}
+crabs$Sex <- as.factor(crabs$Sex)
+```
+
+## Question
+
+Is there a relationship between height and weight in female crabs?
+
+1.  Extract the data for just female crabs.
+
+    ```{r}
+    fcrabs <- crabs %>% 
+      filter(Sex == "F")
+    ```
+
+2.  Examine the response and predictor variables and use the flow chart from class to decide the appropriate statistical analysis (choose from: chi-square, 2-sample t-test or linear regression). Explain your answer here:
+
+    predictor - height (ratio)
+
+    response - weight (ratio)
+
+two continuous variables, so run a simple linear regression test
+
+3.  Work through the data analysis **following all of the steps provided in chapter 5 of your book**. You may use class notes or homework keys as a guide.
+
+first, make a plot
+
+```{r}
+ggplot(fcrabs,
+  aes(x=Height, y=Weight))+
+    geom_point()+
+    theme_bw()
+```
+
+positive correlation, seems to have 1 outlier
+
+id estimate slope to be (77-0)/(0.6-0) = 77/0.6 = 128.33 and y -int around 0
+
+now make a linear regression model
+
+```{r}
+model_crabs <- lm(Weight~ Height,data=fcrabs)
+model_crabs
+```
+
+check for conditions
+
+```{r}
+autoplot(model_crabs)
+```
+
+res v fit straight line shows a weird bend, but straight line before the outliers
+
+normal q-q shows normal curve in data
+
+scale location lack of pattern shows evenness in the variance
+
+residuals v leverage shows 2 outliers that have signifcant leverage
+
+```{r}
+anova(model_crabs)
+```
+
+```{r}
+summary(model_crabs)
+```
+
+Since the p value is very small, we can reject our null hypothesis and conclude that there is a relationship between height and weight in female crabs (613.6 on 1 and 1223 DF, p-value: \< 2.2e-16).
