@@ -1,0 +1,113 @@
+---
+title: "Homework-25"
+author: "ML"
+format: html
+editor: visual
+---
+
+# 11/4 Homework 25
+
+## Working through the code for sections 5.6 and 5.7 in Getting Started with R (pp. 118-129).
+
+## One way ANOVAs
+
+workflow: plot-\>model-\>check assumptions-\>interpret-\>plot again
+
+Getting and Plotting the Data:
+
+looking at water flea growth rates
+
+setup per usual
+
+```{r}
+rm (list =ls())
+library(ggfortify)
+library(tidyverse)
+library(here)
+```
+
+read in data to use
+
+```{r}
+daphnia <- read.csv(here("data", "Daphniagrowth.csv"))
+```
+
+plot
+
+```{r}
+ggplot(daphnia, 
+  aes(x=parasite, y=growth.rate))+
+  geom_boxplot()+
+  theme_bw()+
+  coord_flip() #try coordinate flipping to fix the name crowding 
+```
+
+substantial variation in the gr among the treatments
+
+construct model
+
+```{r}
+model_grow<-lm(growth.rate ~ parasite, data=daphnia)
+model_grow
+```
+
+check assumptions
+
+```{r}
+autoplot(model_grow)
+```
+
+q-q plot is questionable, I'll trust the book that it's okay
+
+linear model is appropriate, no concerns for even variance or leverage
+
+test and interpretation
+
+```{r}
+anova(model_grow)
+```
+
+p is very small, evidencing parasite treatment produces an effect on growth rate
+
+## treatment contrasts
+
+get summary table
+
+```{r}
+summary(model_grow)
+```
+
+recognize that 1.21391 from the model
+
+it says intercept, but that just represents the 1st alphabetically ordered treatment level (control)
+
+treatment contrasts report differences between the reference level
+
+the numbers associated with each parasite are differences between growth rates with the parasite and the control
+
+use dplyr to get means for each group
+
+```{r}
+sumDat<- daphnia%>%
+  group_by(parasite)%>%
+    summarise(meanGR=mean(growth.rate))
+sumDat
+```
+
+make a figure
+
+```{r}
+ggplot(daphnia, 
+  aes(x=parasite, y=growth.rate,colour=factor(parasite)))+
+  geom_point(size=5)+
+  theme_bw()+
+  coord_flip() 
+```
+
+second option of getting package
+
+```{r}
+install.packages("devtools")
+library(devtools)
+install_github("sinhrks/ggfortify")
+```

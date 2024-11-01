@@ -1,0 +1,10 @@
+---
+title: "Homework-25"
+author: "ML"
+format: html
+editor: visual
+---
+
+# 11/4 Homework 25
+
+## Working through the code for sections 5.6 and 5.7 in Getting Started with R (pp. 118-129).
