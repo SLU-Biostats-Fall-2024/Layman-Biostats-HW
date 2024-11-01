@@ -56,7 +56,9 @@ two continuous variables, so run a simple linear regression test
 first, make a plot
 
 ```{r}
-ggplot(fcrabs,
+f2crabs<-crabs%>% filter(Height<1)
+
+ggplot(f2crabs,
   aes(x=Height, y=Weight))+
     geom_point()+
     theme_bw()
@@ -64,12 +66,12 @@ ggplot(fcrabs,
 
 positive correlation, seems to have 1 outlier
 
-id estimate slope to be (77-0)/(0.6-0) = 77/0.6 = 128.33 and y -int around 0
+id estimate slope to be (80-0)/(0.65-0) = 80/0.65 = 123 and change and y -int between -10 and -20
 
 now make a linear regression model
 
 ```{r}
-model_crabs <- lm(Weight~ Height,data=fcrabs)
+model_crabs <- lm(Weight~ Height,data=f2crabs)
 model_crabs
 ```
 
@@ -79,7 +81,7 @@ check for conditions
 autoplot(model_crabs)
 ```
 
-res v fit straight line shows a weird bend, but straight line before the outliers
+res v fit straight line shows a weird bend, but straight line before the outliers, this shows that a linear model is best fit
 
 normal q-q shows normal curve in data
 
