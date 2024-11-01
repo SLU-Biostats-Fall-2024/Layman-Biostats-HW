@@ -67,7 +67,7 @@ test and interpretation
 anova(model_grow)
 ```
 
-p is very small, evidencing parasite treatment produces an effect on growth rate
+p is very small, evidencing parasite treatment produces an effect on growth rate (there is a difference in means between groups)
 
 ## treatment contrasts
 
