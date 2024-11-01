@@ -98,3 +98,7 @@ summary(model_crabs)
 ```
 
 Since the p value is very small, we can reject our null hypothesis and conclude that there is a relationship between height and weight in female crabs (613.6 on 1 and 1223 DF, p-value: \< 2.2e-16).
+
+Null hypothesis: slope is different from 0.
+
+\*\* note from class: Here, i should make another plot with the data and the model that is cleaned up nice
