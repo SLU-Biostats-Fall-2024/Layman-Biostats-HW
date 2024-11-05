@@ -1,0 +1,100 @@
+---
+title: "Homework-26"
+author: "ML"
+format: html
+editor: visual
+---
+
+# 11/6 Homework 26
+
+## Practicing One way ANOVA and Post-Hoc Tests
+
+plot (and guess the answers) --\> build model --\> test assumptions --\> interpret model
+
+setup per usual
+
+```{r}
+rm (list =ls())
+library(ggfortify)
+library(tidyverse)
+library(here)
+```
+
+read in data to use
+
+```{r}
+peas <- read.csv(here("data", "s_r_pea_sections.csv"))
+peas$Treatment<-as.factor(peas$Treatment)
+
+
+```
+
+First interpret the data as we did for the Daphnia growth in Chapter 5, in which you examine treatment constrasts all in comparison to the Control group. Write some language interpreting your results in your .qmd file.
+
+plot
+
+```{r}
+ggplot(peas, 
+  aes(x=Treatment, y=pea_section_length_ou))+
+  geom_boxplot()+
+  theme_bw()+
+  coord_flip()
+```
+
+definitely a difference between means, at least from control vs others, maybe sucrose v others, probably not in the rest
+
+construct a model
+
+```{r}
+model_pea<-lm(pea_section_length_ou ~ Treatment, data=peas)
+model_pea
+```
+
+check assumptions
+
+```{r}
+autoplot(model_pea)
+```
+
+for the most part looks good, maybe questioning the normality and evenness, but I'll continue
+
+test and interpret
+
+```{r}
+anova(model_pea)
+```
+
+veryyy small p value! yay significance = reject null that there's no difference between means = get to run more tests!
+
+Second, conduct a Tukey HSD test to compare differences among all of the treatment group means. Write some language interpreting your results in your .qmd file.
+
+follow up with post-hoc tests!
+
+tukey test
+
+```{r}
+library(multcomp)
+phc1<-glht(model_pea, linfct = mcp(Treatment="Tukey")) #mcp = multiple comparisons
+summary(phc1)
+
+```
+
+ask for a compact letter display
+
+```{r}
+cld(phc1)
+```
+
+this tells us that:
+
+1f1g is different from 2s and control
+
+2g is different from 2s and control
+
+2f is different from 2s and control
+
+and
+
+2s is difference from control
+
+\*different meaning statistically different in means.
