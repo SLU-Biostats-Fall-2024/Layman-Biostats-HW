@@ -30,6 +30,7 @@ read in data to use
 
 ```{r}
 daphnia <- read.csv(here("data", "Daphniagrowth.csv"))
+daphnia$parasite <- as.factor(daphnia$parasite)
 ```
 
 plot
@@ -42,7 +43,7 @@ ggplot(daphnia,
   coord_flip() #try coordinate flipping to fix the name crowding 
 ```
 
-substantial variation in the gr among the treatments
+substantial variation in the gr among the treatments, guess the means and DF
 
 construct model
 
@@ -68,6 +69,7 @@ anova(model_grow)
 ```
 
 p is very small, evidencing parasite treatment produces an effect on growth rate (there is a difference in means between groups)
+Nice sentence - there is a statistically significant effect of parasite treatment on daphnia growth rate (Table 1. F (subscript 3,36) =32.325, p = 2.571e-10)
 
 ## treatment contrasts
 
@@ -99,7 +101,8 @@ make a figure
 ```{r}
 ggplot(daphnia, 
   aes(x=parasite, y=growth.rate,colour=factor(parasite)))+
-  geom_point(size=5)+
+  geom_point(size=3)+
+  geom_point(data=sumDat, aes(parasite,meanGR,fill=parasite),shape=23,size=5)+ # changed the data set here to make the diamonds & add a layer
   theme_bw()+
   coord_flip() 
 ```
@@ -111,3 +114,5 @@ install.packages("devtools")
 library(devtools)
 install_github("sinhrks/ggfortify")
 ```
+
+

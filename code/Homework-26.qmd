@@ -25,23 +25,27 @@ read in data to use
 ```{r}
 peas <- read.csv(here("data", "s_r_pea_sections.csv"))
 peas$Treatment<-as.factor(peas$Treatment)
+levels(peas$Treatment)
 
 
 ```
 
 First interpret the data as we did for the Daphnia growth in Chapter 5, in which you examine treatment constrasts all in comparison to the Control group. Write some language interpreting your results in your .qmd file.
 
-plot
+plot - could also use a histogram
 
 ```{r}
 ggplot(peas, 
   aes(x=Treatment, y=pea_section_length_ou))+
   geom_boxplot()+
+  geom_jitter(width=0.1)+ #shows points
   theme_bw()+
   coord_flip()
 ```
 
 definitely a difference between means, at least from control vs others, maybe sucrose v others, probably not in the rest
+
+dont forget to guess the means here!
 
 construct a model
 
@@ -64,7 +68,11 @@ test and interpret
 anova(model_pea)
 ```
 
-veryyy small p value! yay significance = reject null that there's no difference between means = get to run more tests!
+veryyy small p value! yay significance = reject null that there's no difference between means = get to run more tests (F(4,45)=49.368, p=6.737e-16)!
+
+```{r}
+summary(model_pea)
+```
 
 Second, conduct a Tukey HSD test to compare differences among all of the treatment group means. Write some language interpreting your results in your .qmd file.
 
