@@ -68,8 +68,7 @@ test and interpretation
 anova(model_grow)
 ```
 
-p is very small, evidencing parasite treatment produces an effect on growth rate (there is a difference in means between groups)
-Nice sentence - there is a statistically significant effect of parasite treatment on daphnia growth rate (Table 1. F (subscript 3,36) =32.325, p = 2.571e-10)
+p is very small, evidencing parasite treatment produces an effect on growth rate (there is a difference in means between groups) Nice sentence - there is a statistically significant effect of parasite treatment on daphnia growth rate (Table 1. F (subscript 3,36) =32.325, p = 2.571e-10)
 
 ## treatment contrasts
 
@@ -114,5 +113,3 @@ install.packages("devtools")
 library(devtools)
 install_github("sinhrks/ggfortify")
 ```
-
-
